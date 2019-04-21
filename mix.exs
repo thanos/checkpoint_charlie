@@ -44,6 +44,8 @@ defmodule CheckpointCharlie.MixProject do
       {:jason, "~> 1.1"},
       {:plug_cowboy, "~> 2.0"},
       {:torch, "~> 2.0.0-rc.1"},
+      {:quantum, "~> 2.3"},
+      {:timex, "~> 3.0"}
       # {:talon, github: "talonframework/talon"},
     ]
   end

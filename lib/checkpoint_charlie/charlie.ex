@@ -101,4 +101,30 @@ defmodule CheckpointCharlie.Charlie do
   def change_job(%Job{} = job) do
     Job.changeset(job, %{})
   end
+
+  def update_checkpoint(%Job{} = job, checkpoint_id, status) do
+    index = Enum.find_index(job.checkpoints, fn cp -> cp.id == checkpoint_id end)
+    checkpoint = Enum.at(job.checkpoints,index)
+
+    # checkpoint = Enum.find(job.checkpoints, fn cp -> cp.id == checkpoint_id end) 
+    changeset = Ecto.Changeset.change(job)
+    checkpoint_changeset = Ecto.Changeset.change(checkpoint, status: status) 
+    checkpoints = List.update_at(job.checkpoints, index, fn x -> checkpoint_changeset end)
+    job_chageset = Ecto.Changeset.put_embed(changeset, :checkpoints, checkpoints)
+    Repo.update!(job_chageset)
+  end
+
+  # def update_checkpoint(%Job{} = job, checkpoint) do
+
+  #   index = Enum.find_index(job.checkpoints, fn cp -> cp.id == checkpoint.id end) 
+  #   # checkpoint = Map.put(checkpoint, :id, nil)
+  #   # checkpoint = Enum.at(job.checkpoints,index)
+  #   # checkpoints = List.update_at(job.checkpoints, index, fn x -> Map.put(checkpoint, :status, checkpoint.status) end)
+  #   checkpoints = List.update_at(job.checkpoints, index, fn x -> checkpoint end)
+   
+  #   IO.inspect update_checkpoints(job, checkpoints)
+  # end
+
+
+
 end

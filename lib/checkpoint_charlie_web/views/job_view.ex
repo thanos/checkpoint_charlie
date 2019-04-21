@@ -1,6 +1,7 @@
 defmodule CheckpointCharlieWeb.JobView do
   use CheckpointCharlieWeb, :view
   alias CheckpointCharlieWeb.JobView
+  alias CheckpointCharlieWeb.CheckpointView
 
   def render("index.json", %{jobs: jobs}) do
     %{data: render_many(jobs, JobView, "job.json")}
@@ -14,6 +15,10 @@ defmodule CheckpointCharlieWeb.JobView do
     %{id: job.id,
       name: job.name,
       is_enabled: job.is_enabled,
-      meta_data: job.meta_data}
+      meta_data: job.meta_data,
+      start_run_by_cron: job.start_run_by_cron,
+    } 
+   |> Map.put(:checkpoints, CheckpointView.render("checkpoints.json", checkpoints: job.checkpoints))
   end
+
 end
