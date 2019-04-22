@@ -3,6 +3,7 @@ defmodule CheckpointCharlieWeb.RunController do
 
   alias CheckpointCharlie.Monitoring
   alias CheckpointCharlie.Monitoring.Run
+  alias CheckpointCharlie.Charlie
 
   action_fallback CheckpointCharlieWeb.FallbackController
 
@@ -40,4 +41,17 @@ defmodule CheckpointCharlieWeb.RunController do
       send_resp(conn, :no_content, "")
     end
   end
+
+
+  def invoke(conn, %{"job_id" => job_id}) do
+    job = Charlie.get_job!(job_id)
+    with {:ok, %Run{} = run} <- Monitoring.start_run(job) do
+      conn
+      |> put_status(:created)
+      |> put_resp_header("location", Routes.run_path(conn, :show, run))
+      |> render("show.json", run: run)
+    end
+  end
+
+
 end

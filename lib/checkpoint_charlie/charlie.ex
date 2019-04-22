@@ -7,6 +7,7 @@ defmodule CheckpointCharlie.Charlie do
   alias CheckpointCharlie.Repo
 
   alias CheckpointCharlie.Charlie.Job
+  
 
   @doc """
   Returns the list of jobs.
@@ -126,5 +127,23 @@ defmodule CheckpointCharlie.Charlie do
   # end
 
 
+
+  def start_job(%Job{} = job, attrs \\ %{}) do
+
+      attrs = Enum.into(attrs, %{
+        job_spec: CheckpointCharlieWeb.JobView.render("job.json", %{job: job}),
+        name: job.name,
+        job_id: job.id,
+        meta_data: %{},
+        checkpoints: Enum.map(job.checkpoints, fn x -> %{
+                          checkpoint_id: x.id,
+                          name: x.name,
+                          sla: x.sla,
+                          status: "PENDING",
+                          meta_data: %{}
+                      } end),
+      })
+      CheckpointCharlie.Monitoring.create_run(attrs)
+  end
 
 end

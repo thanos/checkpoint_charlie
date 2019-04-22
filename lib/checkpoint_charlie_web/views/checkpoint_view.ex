@@ -12,7 +12,6 @@ defmodule CheckpointCharlieWeb.CheckpointView do
       sla: checkpoint.sla,
       name: checkpoint.name,
       meta_dat: checkpoint.meta_dat,
-      status: checkpoint.status,
         } 
     end
   end

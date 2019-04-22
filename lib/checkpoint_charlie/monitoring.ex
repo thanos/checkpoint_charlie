@@ -7,6 +7,7 @@ defmodule CheckpointCharlie.Monitoring do
   alias CheckpointCharlie.Repo
 
   alias CheckpointCharlie.Monitoring.Run
+  alias CheckpointCharlie.Charlie.Job
 
   @doc """
   Returns the list of runs.
@@ -101,4 +102,19 @@ defmodule CheckpointCharlie.Monitoring do
   def change_run(%Run{} = run) do
     Run.changeset(run, %{})
   end
+
+
+  def start_run(%Job{} = job = job, attrs \\ %{}) do
+    attrs = Enum.into(attrs, %{
+      meta_data: job.meta_data,
+      name: job.name,
+      job_id: job.id
+    })
+
+    %Run{}
+      |> Run.changeset(attrs)
+      |> Repo.insert()
+  end
+
+  
 end

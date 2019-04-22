@@ -43,10 +43,7 @@ defmodule CheckpointCharlieWeb.JobController do
   end
 
 
-  def start(conn, %{"id" => id}) do
-    job = Charlie.get_job!(id)
-    render(conn, "show.json", job: job)
-  end
+  
 
 
   # def checkpoint_status(conn, %{"id" => id, "checkpoint_id" => checkpoint_id, "params" => params}) do

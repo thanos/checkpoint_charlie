@@ -13,11 +13,10 @@ defmodule CheckpointCharlie.Charlie.Job do
     field :name, :string
     field :start_run_by_cron, :string, default: nil
     has_many :run, Run
-    embeds_many :checkpoints, CheckPoint do
+    embeds_many :checkpoints, CheckPoint, on_replace: :delete  do
       field :meta_dat, :map
       field :name, :string
       field :sla, :float
-      field :status, :string
       embeds_one :field_extraction_regex, FieldExtractionRegex do
         field :run_id_regex, :string
         field :running_regex,  :string
@@ -41,8 +40,8 @@ defmodule CheckpointCharlie.Charlie.Job do
   
   defp cast_checkpoints(checkpoint, params) do
     checkpoint
-    |> cast(params, [:name, :meta_dat, :sla, :status])
-    |> validate_required([:name, :meta_dat, :sla, :status])
+    |> cast(params, [:name, :meta_dat, :sla])
+    |> validate_required([:name, :meta_dat, :sla])
     |> cast_embed(:field_extraction_regex, with: &cast_field_extraction_regex/2)
   end
 
