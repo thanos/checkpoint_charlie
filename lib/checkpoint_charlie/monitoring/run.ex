@@ -10,7 +10,7 @@ defmodule CheckpointCharlie.Monitoring.Run do
     field :meta_data, :map
     field :name, :string
     belongs_to :job, Job
-    field :job_def, :map
+    field :job_spec, :map
     embeds_many :checkpoints, CheckpointCharlie.Monitoring.Checkpoint, on_replace: :delete 
     embeds_many :status, CheckpointCharlie.Monitoring.Status, on_replace: :delete 
    
@@ -20,17 +20,24 @@ defmodule CheckpointCharlie.Monitoring.Run do
   @doc false
   def changeset(run, attrs) do
     run
-    |> cast(attrs, [:name, :meta_data, :job_id])
-    |> validate_required([:name, :meta_data])
+    |> cast(attrs, [:name, :meta_data, :job_id, :job_spec])
+    |> validate_required([:name, :meta_data, :job_id, :job_spec])
     |> assoc_constraint(:job)
-    # |> cast_embed(:checkpoints, with: &cast_checkpoints/2)
+    |> cast_embed(:checkpoints, with: &cast_checkpoints/2)
   end
 
-  # defp cast_checkpoints(checkpoint, params) do
+  defp cast_checkpoints(checkpoint, params) do
+    checkpoint
+    |> cast(params, [:name, :last_update, :status, :meta_data])
+    |> validate_required([:name, :last_update, :status, :meta_data])
+    |> validate_inclusion(:status, ["PENDING", "RUNNING", "DONE", "FAILED"])
+  end
+
+
+  # def changeset(%Checkpoint{} = checkpoint, attrs) do
   #   checkpoint
-  #   |> cast(params, [:name, :meta_dat, :sla, :status])
-  #   |> validate_required([:name, :meta_dat, :sla, :status])
-  #   |> cast_embed(:field_extraction_regex, with: &cast_field_extraction_regex/2)
+  #   |> cast(attrs, [:name, :last_update, :status, :meta_data])
+  #   |> validate_required([:name, :last_update, :status, :meta_data])
   # end
 
   # def trace(changeset) do

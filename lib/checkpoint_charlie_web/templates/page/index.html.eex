@@ -1,35 +1,47 @@
-<section class="phx-hero">
-  <h1><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h1>
-  <p>A productive web framework that<br/>does not compromise speed or maintainability.</p>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+
+<section class="phx-hero" >
+<div class="container" id="app">
+ 
+    <div class="row"  v-for="job in jobs.data">
+ 
+ <template>
+      <div class="column column-25"> <a :href=`/job/${job.id}`> {{ job.id }}</a></div>
+      <template v-for="checkpoint in job.checkpoints">
+          <div class="column">{{ checkpoint.name }}</div>
+      </template>
+    </div>
+     </template>
+  </div>
 </section>
 
-<section class="row">
-  <article class="column">
-    <h2>Resources</h2>
-    <ul>
-      <li>
-        <a href="https://hexdocs.pm/phoenix/overview.html">Guides &amp; Docs</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix">Source</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix/blob/v1.4/CHANGELOG.md">v1.4 Changelog</a>
-      </li>
-    </ul>
-  </article>
-  <article class="column">
-    <h2>Help</h2>
-    <ul>
-      <li>
-        <a href="https://elixirforum.com/c/phoenix-forum">Forum</a>
-      </li>
-      <li>
-        <a href="https://webchat.freenode.net/?channels=elixir-lang">#elixir-lang on Freenode IRC</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/elixirphoenix">Twitter @elixirphoenix</a>
-      </li>
-    </ul>
-  </article>
-</section>
+
+
+<script>
+
+
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    jobs:[]
+  },
+    // delimiters: ["%%", "%%"]
+});
+
+axios.get('/api/jobs')
+  .then(function (response) {
+    app.jobs = response.data;
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  })
+  .then(function () {
+    // always executed
+  }); 
+</script>
+

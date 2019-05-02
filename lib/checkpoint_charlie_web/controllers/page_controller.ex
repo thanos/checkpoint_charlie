@@ -4,4 +4,8 @@ defmodule CheckpointCharlieWeb.PageController do
   def index(conn, _params) do
     render(conn, "index.html")
   end
+
+  def job(conn, %{"id" => id}) do
+    render(conn, "job.html", id: id)
+end
 end

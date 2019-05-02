@@ -17,14 +17,16 @@ defmodule CheckpointCharlieWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/job/:id", PageController, :job
+    get "/hello/:name", HelloController, :world
   end
 
   # Other scopes may use custom stacks.
   scope "/api", CheckpointCharlieWeb do
     pipe_through :api
-    resources "/jobs", JobController, except: [:new, :edit]
+    resources "/jobs", JobController
     resources "/runs", RunController, except: [:new, :edit]
-
+    resources "/player", PlayerController, except: [:new, :edit]
     get "/runs/invoke/:job_id", RunController, :invoke
     get "/runs/:id/checkpoint/:checkpoint_id/start", JobController, :checkpoint_start
     get "/runs/:id/checkpoint/:checkpoint_id/failed", JobController, :checkpoint_failed

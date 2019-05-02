@@ -7,6 +7,7 @@ defmodule CheckpointCharlie.Charlie do
   alias CheckpointCharlie.Repo
 
   alias CheckpointCharlie.Charlie.Job
+  alias CheckpointCharlie.Monitoring
   
 
   @doc """
@@ -37,6 +38,11 @@ defmodule CheckpointCharlie.Charlie do
 
   """
   def get_job!(id), do: Repo.get!(Job, id)
+
+
+  def get_job_by(params) do 
+    Repo.get_by(Job, params)
+  end
 
   @doc """
   Creates a job.
@@ -129,7 +135,6 @@ defmodule CheckpointCharlie.Charlie do
 
 
   def start_job(%Job{} = job, attrs \\ %{}) do
-
       attrs = Enum.into(attrs, %{
         job_spec: CheckpointCharlieWeb.JobView.render("job.json", %{job: job}),
         name: job.name,
@@ -140,10 +145,11 @@ defmodule CheckpointCharlie.Charlie do
                           name: x.name,
                           sla: x.sla,
                           status: "PENDING",
-                          meta_data: %{}
+                          meta_data: %{},
+                          last_update: NaiveDateTime.utc_now()
                       } end),
       })
-      CheckpointCharlie.Monitoring.create_run(attrs)
+      Monitoring.create_run(attrs)
   end
 
 end

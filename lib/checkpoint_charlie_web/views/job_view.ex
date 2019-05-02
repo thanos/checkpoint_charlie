@@ -1,7 +1,6 @@
 defmodule CheckpointCharlieWeb.JobView do
   use CheckpointCharlieWeb, :view
   alias CheckpointCharlieWeb.JobView
-  alias CheckpointCharlieWeb.CheckpointView
 
   def render("index.json", %{jobs: jobs}) do
     %{data: render_many(jobs, JobView, "job.json")}
@@ -13,12 +12,26 @@ defmodule CheckpointCharlieWeb.JobView do
 
   def render("job.json", %{job: job}) do
     %{id: job.id,
-      name: job.name,
+      label: job.label,
       is_enabled: job.is_enabled,
-      meta_data: job.meta_data,
       start_run_by_cron: job.start_run_by_cron,
-    } 
-   |> Map.put(:checkpoints, CheckpointView.render("checkpoints.json", checkpoints: job.checkpoints))
+      start_grace_period: job.start_grace_period,
+      duration: job.duration,
+      duration_grace_period: job.duration_grace_period,
+      meta_data: job.meta_data
+    }
+    |> Map.put(:checkpoints, process("checkpoints.json", job.checkpoints))
   end
-
+  def process("checkpoints.json", checkpoints)  do
+    Enum.map(checkpoints, fn cp -> process("checkpoint.json", cp) end)
+  end
+  
+  def process("checkpoint.json", checkpoint) do
+    %{
+          id: checkpoint.id,
+          label: checkpoint.label,
+          meta_data: checkpoint.meta_data,
+          stats: checkpoint.stats
+      } 
+  end
 end

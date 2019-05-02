@@ -1,0 +1,103 @@
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<section class="phx-hero" >
+<div class="container" id="app">
+    <div class="row">
+      <div class="column column-25">{{ job.name }}</div>
+      <template v-for="checkpoint in job.checkpoints">
+          <div class="column">{{checkpoint.name}}</div>
+      </template>
+    </div>
+    <div class="row"  v-for="run in job.runs">
+      <div class="column column-25"> {{moment(run.inserted_at).fromNow()}}</div>
+      <template v-for="checkpoint in run.checkpoints">
+          <div class="column">{{checkpoint.status}}</div>
+      </template>
+    </div>
+  </div>
+</section>
+
+<script>
+
+
+
+var X_runs  = {"data":[{"checkpoints":[{"id":"32599cdd-b973-4c0b-9a53-3c1fccdc0b5b","meta_data":{},"name":"stage 1","status":"PENDING"},{"id":"8c0d36ea-15d0-4811-9db3-9f2f6612cf6a","meta_data":{},"name":"stage 2","status":"PENDING"}],"id":"d1ccf3ee-c751-4cd7-95d3-27d7d3b82631","inserted_at":"2019-04-22T21:09:08","job_id":"ff476f99-e472-4e04-9858-9967887f331c","meta_data":{},"name":"risk run","updated_at":"2019-04-22T21:09:08"}]}
+
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    job: {}
+  },
+  mounted: function () {
+    load_job(this, "<%= @id %>")
+
+  }
+});
+
+
+function load_job(app, job_id) {
+    axios.get('/api/jobs/'+ job_id)
+    .then(function (response) {
+        app.job = response.data.data;
+        load_runs(app.job)
+        console.log(response);
+    })
+    .catch(function (error) {
+        console.log(error);
+    })
+    .then(function () {
+        // always executed
+    });
+}
+
+function load_runs(job) {
+    axios.get('/api/runs')
+    .then(function (response) {
+        Vue.set(job, 'runs', response.data.data)
+        console.log(response);
+    })
+    .catch(function (error) {
+        console.log(error);
+    })
+    .then(function () {
+        // always executed
+    });
+}
+
+</script>
+
+<!-- <section class="row">
+  <article class="column">
+    <h2>Resources</h2>
+    <ul>
+      <li>
+        <a href="https://hexdocs.pm/phoenix/overview.html">Guides &amp; Docs</a>
+      </li>
+      <li>
+        <a href="https://github.com/phoenixframework/phoenix">Source</a>
+      </li>
+      <li>
+        <a href="https://github.com/phoenixframework/phoenix/blob/v1.4/CHANGELOG.md">v1.4 Changelog</a>
+      </li>
+    </ul>
+  </article>
+  <article class="column">
+    <h2>Help</h2>
+    <ul>
+      <li>
+        <a href="https://elixirforum.com/c/phoenix-forum">Forum</a>
+      </li>
+      <li>
+        <a href="https://webchat.freenode.net/?channels=elixir-lang">#elixir-lang on Freenode IRC</a>
+      </li>
+      <li>
+        <a href="https://twitter.com/elixirphoenix">Twitter @elixirphoenix</a>
+      </li>
+    </ul>
+  </article>
+</section> -->
+
+

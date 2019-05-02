@@ -38,6 +38,12 @@ defmodule CheckpointCharlie.Monitoring do
   """
   def get_run!(id), do: Repo.get!(Run, id)
 
+
+  def get_run_by(params) do 
+    Repo.get_by(Run, params)
+  end
+
+
   @doc """
   Creates a run.
 
