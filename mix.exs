@@ -38,14 +38,16 @@ defmodule CheckpointCharlie.MixProject do
       {:phoenix_ecto, "~> 4.0"},
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 2.11"},
+      {:phoenix_html, "~> 2.13.2"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.1"},
       {:plug_cowboy, "~> 2.0"},
       {:torch, "~> 2.0.0-rc.1"},
       {:quantum, "~> 2.3"},
-      {:timex, "~> 3.0"}
+      {:timex, "~> 3.0"},
+      {:phoenix_dtl, "~> 0.0.1"},
+      {:ecto_autoslug_field, "~> 1.0"}
       # {:talon, github: "talonframework/talon"},
     ]
   end

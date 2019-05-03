@@ -41,6 +41,11 @@ defmodule CheckpointCharlieWeb.JobController do
     end
   end
 
-  def strip_stats(params), do: Map.put(params, "checkpoints", Enum.map(Map.get(params, "checkpoints"), fn x -> Map.drop(x, ["stats"]) end))
+  def strip_stats(params) do
+    case checkpoints = Map.get(params, "checkpoints") do
+      nil -> params
+      _ -> Map.put(params, "checkpoints", Enum.map(checkpoints, fn x -> Map.drop(x, ["stats"]) end))
+    end
+  end
     
 end

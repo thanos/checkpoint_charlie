@@ -25,7 +25,7 @@ job_spec =  %{
     start_grace_period: 42, 
     start_run_by_cron: "*/15 * * * *",
     checkpoints: [
-      %{label: "Control File Received"},
+      %{label: "Control File Received", stats: %{max: 100}},
       %{label: "Spark Jobs Filtering"},
       %{label: "Collating and Decorating Filtered Files"},
       %{label: "Uploading Files"}
