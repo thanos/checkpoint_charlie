@@ -7,7 +7,7 @@ defmodule CheckpointCharlie.MixProject do
       version: "0.1.0",
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      compilers: [:phoenix, :gettext, :phoenix_swagger] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
@@ -47,8 +47,10 @@ defmodule CheckpointCharlie.MixProject do
       {:quantum, "~> 2.3"},
       {:timex, "~> 3.0"},
       {:phoenix_dtl, "~> 0.0.1"},
-      {:ecto_autoslug_field, "~> 1.0"}
+      {:ecto_autoslug_field, "~> 1.0"},
       # {:talon, github: "talonframework/talon"},
+      {:phoenix_swagger, "~> 0.8"},
+      {:ex_json_schema, "~> 0.5"} # optional
     ]
   end
 

@@ -122,5 +122,4 @@ defmodule CheckpointCharlie.Monitoring do
       |> Repo.insert()
   end
 
-  
 end

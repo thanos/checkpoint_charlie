@@ -37,4 +37,13 @@ config :torch,
   template_format: "eex" || "slim"
 
 
+  config :checkpoint_charlie, :phoenix_swagger,
+  swagger_files: %{
+    "priv/static/swagger.json" => [
+      router: CheckpointCharlieWeb.Router,     # phoenix routes will be converted to swagger paths
+      endpoint: CheckpointCharlieWeb.Endpoint  # (optional) endpoint config used to set host, port and https schemes.
+    ]
+  }
+
+
 import_config "#{Mix.env()}.exs"

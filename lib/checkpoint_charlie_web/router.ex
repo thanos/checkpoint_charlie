@@ -24,7 +24,7 @@ defmodule CheckpointCharlieWeb.Router do
   # Other scopes may use custom stacks.
   scope "/api", CheckpointCharlieWeb do
     pipe_through :api
-    resources "/jobs", JobController
+    resources "/jobs", JobController, except: [:new, :edit]
     resources "/runs", RunController, except: [:new, :edit]
     resources "/player", PlayerController, except: [:new, :edit]
     get "/runs/invoke/:job_id", RunController, :invoke
@@ -32,5 +32,20 @@ defmodule CheckpointCharlieWeb.Router do
     get "/runs/:id/checkpoint/:checkpoint_id/failed", JobController, :checkpoint_failed
     get "/runs/:id/checkpoint/:checkpoint_id/done", JobController, :checkpoint_done
     get "/runs/:id/checkpoint/:checkpoint_id", JobController, :checkpoint_status
+  end
+
+
+  scope "/api/swagger" do
+    forward "/", PhoenixSwagger.Plug.SwaggerUI, otp_app: :checkpoint_charlie, swagger_file: "swagger.json"
+  end
+
+
+  def swagger_info do
+    %{
+      info: %{
+        version: "1.0",
+        title: "Checkpoint Charlie"
+      }
+    }
   end
 end
